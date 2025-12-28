@@ -42,6 +42,11 @@ jobs:
           path: './build/web' # المسار الذي يحتوي على الملفات الناتجة
 
       # 7. نشر GitHub Pages
-      - uses: actions/deploy-pages@v4
-      
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          # >>> إضافة سطر النشر على الفرع (gh-pages) <<<
+          publish_branch: gh-pages 
+
 
