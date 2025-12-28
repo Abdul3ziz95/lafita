@@ -31,6 +31,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  # >>> أضف هذا السطر هنا <<<
+  assets:
+    - assets/sample_video.mp4 
+    
+  uses-material-design: true
 
   # تحتاج لإضافة فيديو تجريبي أو صورة هنا
   assets:
