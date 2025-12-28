@@ -1,14 +1,14 @@
+
 name: Flutter Web Deploy
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch: # يسمح بالتشغيل اليدوي
+  workflow_dispatch:
 
 jobs:
   build_and_deploy:
-    # صلاحيات الكتابة ضرورية لإنشاء فرع gh-pages
     permissions:
       contents: write
       pages: write
@@ -16,25 +16,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. سحب كود المستودع
       - uses: actions/checkout@v4
 
-      # 2. إعداد بيئة Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # إصدار Flutter
+          flutter-version: '3.19.0'
 
-      # 3. جلب الاعتمادات
       - run: flutter pub get
 
-      # 4. بناء التطبيق للويب (يحل مشكلة المسار الفرعي /lafita/)
       - run: flutter build web --release --base-href /lafita/
 
-      # 5. نشر الملفات إلى فرع gh-pages (يحل مشكلة إعدادات Pages)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
           publish_branch: gh-pages
-
+          
