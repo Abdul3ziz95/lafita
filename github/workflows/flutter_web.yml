@@ -4,40 +4,33 @@ on:
   push:
     branches:
       - main
-  # يسمح بالتشغيل اليدوي من تبويب Actions
-  workflow_dispatch:
+  workflow_dispatch: # للسماح بالتشغيل اليدوي
 
 jobs:
   build_and_deploy:
-    # يجب أن يكون لديه صلاحية الكتابة لإنشاء فرع gh-pages
+    # صلاحيات الكتابة ضرورية لإنشاء فرع gh-pages
     permissions:
       contents: write
       pages: write
-      id-token: write
+      id-token: write # صلاحيات إضافية ضرورية لـ GitHub Actions
     runs-on: ubuntu-latest
 
     steps:
-      # 1. سحب كود المستودع
       - uses: actions/checkout@v4
-
-      # 2. إعداد بيئة Flutter
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # يمكنك تحديث هذا الرقم لاحقاً
+          flutter-version: '3.19.0'
           
-      # 3. جلب الاعتمادات (Packages)
       - run: flutter pub get
 
-      # 4. بناء التطبيق للويب مع تحديد المسار الأساسي (الأهم)
+      # أمر البناء الصحيح للمسار الفرعي
       - run: flutter build web --release --base-href /lafita/
 
-      # 5. نشر الملفات إلى فرع gh-pages (باستخدام Peaceiris)
+      # 🌟 خطوة النشر إلى فرع gh-pages 🌟
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # المسار الذي يحتوي على الملفات الناتجة من البناء
           publish_dir: ./build/web
-          # الفرع الذي ستنشر إليه الملفات
-          publish_branch: gh-pages
+          publish_branch: gh-pages # ينشر الملفات إلى هذا الفرع
           
