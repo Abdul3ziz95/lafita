@@ -30,8 +30,8 @@ jobs:
       # 3. جلب الاعتمادات (Packages)
       - run: flutter pub get
 
-      # 4. بناء التطبيق للويب
-      - run: flutter build web --release
+            # 4. بناء التطبيق للويب (تغيير هذا السطر)
+      - run: flutter build web --release --base-href /lafita/
 
       # 5. تكوين GitHub Pages
       - uses: actions/configure-pages@v4
