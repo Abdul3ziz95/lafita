@@ -1,0 +1,39 @@
+name: led_banner_scroller
+description: A feature-rich LED Banner / Scrolling Text application built with Flutter.
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # لحفظ إعدادات المستخدم
+  shared_preferences: ^2.2.2 
+
+  # لتطبيق تأثير تمرير النص (Scrolling Text)
+  marquee: ^2.2.0 
+
+  # لتشغيل خلفيات الفيديو
+  video_player: ^2.8.3 
+
+  # لإدارة حالة التطبيق
+  provider: ^6.1.1 
+  
+  # لاختيار الألوان
+  flutter_colorpicker: ^1.0.0 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1 
+
+flutter:
+  uses-material-design: true
+
+  # تحتاج لإضافة فيديو تجريبي أو صورة هنا
+  assets:
+    - assets/sample_video.mp4 
+    # تأكد من وضع ملف فيديو اسمه 'sample_video.mp4' داخل مجلد assets/ 
+    
