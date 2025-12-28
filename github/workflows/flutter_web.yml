@@ -1,0 +1,46 @@
+# اسم سير العمل (Workflow)
+name: Flutter Web Deploy
+
+# متى يتم تشغيل هذا السير (عند الدفع إلى الفرع الرئيسي)
+on:
+  push:
+    branches:
+      - main  # تأكد أن هذا هو اسم الفرع الرئيسي لمشروعك (قد يكون master)
+
+# صلاحيات الوصول المطلوبة لإنشاء GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  
+# الوظائف (Jobs)
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest # تشغيل على خادم لينكس افتراضي
+
+    steps:
+      # 1. سحب كود المستودع
+      - uses: actions/checkout@v4
+
+      # 2. إعداد بيئة Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # يمكنك تحديث هذا الرقم لاحقاً
+
+      # 3. جلب الاعتمادات (Packages)
+      - run: flutter pub get
+
+      # 4. بناء التطبيق للويب
+      - run: flutter build web --release
+
+      # 5. تكوين GitHub Pages
+      - uses: actions/configure-pages@v4
+
+      # 6. رفع ملفات البناء (build/web) إلى Artifacts
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build/web' # المسار الذي يحتوي على الملفات الناتجة
+
+      # 7. نشر GitHub Pages
+      - uses: actions/deploy-pages@v4
+      
