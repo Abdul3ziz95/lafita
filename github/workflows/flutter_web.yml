@@ -1,22 +1,20 @@
-# اسم سير العمل (Workflow)
 name: Flutter Web Deploy
 
-# متى يتم تشغيل هذا السير (عند الدفع إلى الفرع الرئيسي)
 on:
   push:
     branches:
-      - main  # تأكد أن هذا هو اسم الفرع الرئيسي لمشروعك (قد يكون master)
+      - main
+  # يسمح بالتشغيل اليدوي من تبويب Actions
+  workflow_dispatch:
 
-# صلاحيات الوصول المطلوبة لإنشاء GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-  
-# الوظائف (Jobs)
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest # تشغيل على خادم لينكس افتراضي
+    # يجب أن يكون لديه صلاحية الكتابة لإنشاء فرع gh-pages
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
 
     steps:
       # 1. سحب كود المستودع
@@ -26,27 +24,20 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0' # يمكنك تحديث هذا الرقم لاحقاً
-
+          
       # 3. جلب الاعتمادات (Packages)
       - run: flutter pub get
 
-                  # 4. بناء التطبيق للويب
+      # 4. بناء التطبيق للويب مع تحديد المسار الأساسي (الأهم)
       - run: flutter build web --release --base-href /lafita/
 
-      # 5. تكوين GitHub Pages
-      - uses: actions/configure-pages@v4
-
-      # 6. رفع ملفات البناء (build/web) إلى Artifacts
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: './build/web' # المسار الذي يحتوي على الملفات الناتجة
-
-      # 7. نشر GitHub Pages
-      - uses: peaceiris/actions-gh-pages@v3
+      # 5. نشر الملفات إلى فرع gh-pages (باستخدام Peaceiris)
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          # المسار الذي يحتوي على الملفات الناتجة من البناء
           publish_dir: ./build/web
-          # >>> إضافة سطر النشر على الفرع (gh-pages) <<<
-          publish_branch: gh-pages 
-
-
+          # الفرع الذي ستنشر إليه الملفات
+          publish_branch: gh-pages
+          
